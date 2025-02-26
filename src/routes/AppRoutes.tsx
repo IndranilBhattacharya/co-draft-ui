@@ -1,18 +1,37 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import RegisterPage from "../pages/RegisterPage";
-import HomePage from "../pages/HomePage";
-import DocumentPage from "../pages/DocumentPage";
+import { lazy } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-const AppRoutes = () => {
+import Layout from "../components/Layout";
+import AppRouterProps from "../interfaces/AppRouterProps";
+
+const RegisterPage = lazy(() => import("../pages/RegisterPage"));
+const DocumentsPage = lazy(() => import("../pages/DocumentsPage"));
+const EditDocumentPage = lazy(() => import("../pages/EditDocumentPage"));
+
+export default function AppRoutes({
+  isUserRegistered,
+}: Readonly<AppRouterProps>) {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/document/:id" element={<DocumentPage />} />
-      </Routes>
-    </Router>
-  );
-};
+        <Route
+          path="/"
+          element={
+            isUserRegistered ? (
+              <Navigate to="/documents" />
+            ) : (
+              <Navigate to="/register" />
+            )
+          }
+        />
 
-export default AppRoutes;
+        <Route path="/register" element={<RegisterPage />} />
+
+        <Route element={<Layout />}>
+          <Route path="/documents" element={<DocumentsPage />} />
+          <Route path="/documents/edit/:id" element={<EditDocumentPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
