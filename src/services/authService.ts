@@ -1,7 +1,7 @@
 import api from "./apiClient";
 
 export const authService = {
-  async checkAuth() {
+  async verifyDevice() {
     const { data } = await api.post("/auth/verify", {
       deviceId: "123",
     });
