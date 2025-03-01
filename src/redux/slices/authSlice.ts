@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import AuthState from "../../interfaces/AuthState";
+import { checkVerificationStatus } from "../thunks/authThunks";
 
 const initialState: AuthState = {
   isVerified: false,
@@ -19,6 +20,12 @@ const authSlice = createSlice({
       state.isVerified = false;
       state.userDetails = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(checkVerificationStatus.fulfilled, (state, action) => {
+      state.isVerified = true;
+      state.userDetails = action.payload;
+    });
   },
 });
 

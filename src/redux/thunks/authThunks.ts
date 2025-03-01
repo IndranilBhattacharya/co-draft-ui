@@ -1,10 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const authThunks = createAsyncThunk(
+import { authService } from "../../services/authService";
+
+export const checkVerificationStatus = createAsyncThunk(
   "auth/checkVerificationStatus",
   async (_, { rejectWithValue }) => {
     try {
-      // const response = await authService.checkAuth()
+      const response = await authService.checkAuth();
+      return response;
     } catch (error) {
       rejectWithValue(error);
     }
