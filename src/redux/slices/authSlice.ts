@@ -26,6 +26,10 @@ const authSlice = createSlice({
       state.isVerified = true;
       state.userDetails = action.payload;
     });
+    builder.addCase(checkVerificationStatus.rejected, (state) => {
+      state.isVerified = false;
+      state.userDetails = null;
+    });
   },
 });
 

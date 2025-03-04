@@ -1,5 +1,14 @@
-import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
+
+import { RootState } from "../redux/store";
 
 export default function ProtectedRoute() {
-  return <div>ProtectedRoute</div>;
+  const isDeviceVerified = useSelector<RootState>(
+    (state) => state.auth.isVerified
+  );
+
+  if (!isDeviceVerified) return <Navigate to="/register" replace />;
+
+  return <Outlet />;
 }
