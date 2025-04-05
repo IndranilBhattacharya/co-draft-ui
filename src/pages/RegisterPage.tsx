@@ -21,19 +21,28 @@ export default function RegisterPage() {
     <div className="flex w-screen bg-black">
       <BackgroundBeams />
 
-      <div className="absolute inset-0 z-10">
-        <div className="flex flex-col pt-[30vh] pb-[5vh] px-[5vw] h-screen items-start">
+      <div className="z-10 absolute inset-y-[2.5vw] inset-x-[5vw] flex items-center">
+        <div className="w-1/2 h-full flex flex-col pt-[25vh] pb-[5vh] items-start">
           <div className="gap-2 flex flex-col items-start">
-            <div className="text-6xl font-bold">CoDraft</div>
+            <div className="text-7xl font-bold">
+              <span className="bg-gradient-to-r from-gray-300 to-gray-700 bg-clip-text text-transparent">
+                Co
+              </span>
+              <span>Draft</span>
+            </div>
             <div className="text-xl text-muted-foreground">
               Instant collaboration. No clutter. Just draft and go.
             </div>
           </div>
-          <div className="mt-auto">
+          <div className="mt-auto text-xs">
             © 2025 Indranil Bhattacharya. All Rights Reserved.
           </div>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2"></form>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-1/2 h-full bg-foreground/5 rounded-3xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-sm border-b border-white/10"
+        ></form>
       </div>
     </div>
   );
