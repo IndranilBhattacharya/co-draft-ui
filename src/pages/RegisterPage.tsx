@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import multiavatar from "@multiavatar/multiavatar/esm";
 
 import LandingGreeting from "@/components/LandingGreeeting";
 import RegistrationHeader from "@/components/RegistrationHeader";
@@ -17,6 +18,8 @@ export default function RegisterPage() {
     resolver: zodResolver(userSchema),
   });
 
+  let svgCode = multiavatar("Binx Bond");
+
   const onSubmit = async (data: RegisterUserFormInputs) => {};
 
   return (
@@ -30,6 +33,13 @@ export default function RegisterPage() {
           className="p-8 w-1/2 h-full flex flex-col bg-foreground/5 rounded-3xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-sm border-b border-white/10"
         >
           <RegistrationHeader />
+
+          <div className="flex flex-col my-auto items-center justify-center">
+            <div
+              className="w-[4vw] aspect-square border border-muted-foreground/50 rounded-full shadow-2xl"
+              dangerouslySetInnerHTML={{ __html: svgCode }}
+            />
+          </div>
         </form>
       </div>
     </>
