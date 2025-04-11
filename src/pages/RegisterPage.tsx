@@ -1,17 +1,25 @@
 import { Dices } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { RootState } from "@/redux/store";
 import { useForm } from "react-hook-form";
+import { useCallback, useEffect } from "react";
+import { setAvatar } from "@/redux/slices/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
 import multiavatar from "@multiavatar/multiavatar/esm";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import UserDetail from "@/interfaces/UserDetail";
 import LandingGreeting from "@/components/LandingGreeeting";
 import RegistrationHeader from "@/components/RegistrationHeader";
 import { BackgroundBeams } from "@/components/ui/BackgroundBeams";
-import { RegisterUserFormInputs, userSchema } from "../schema/userSchema";
+import { RegisterUserFormInputs, userSchema } from "@/schema/userSchema";
 
 export default function RegisterPage() {
+  const userDetails = useSelector<RootState>(
+    (state) => state.auth.userDetails
+  ) as UserDetail;
+
   const dispatch = useDispatch();
   const {
     setValue,
@@ -22,7 +30,20 @@ export default function RegisterPage() {
     resolver: zodResolver(userSchema),
   });
 
-  let svgCode = multiavatar("Binx Bond");
+  // generate unique id specific to user device for avatar generation
+  const generateAvatar = useCallback(() => {
+    if (!userDetails?.visitorId) return;
+
+    // generate uniquely signatured avatar
+    const avatarId = `${userDetails.visitorId}${Date.now()}`;
+    setValue("avatar", avatarId);
+    dispatch(setAvatar(avatarId));
+  }, [dispatch, setValue, userDetails.visitorId]);
+
+  // on mount of Registratio page, we first set
+  useEffect(() => {
+    generateAvatar();
+  }, [generateAvatar]);
 
   const onSubmit = async (data: RegisterUserFormInputs) => {};
 
@@ -41,10 +62,17 @@ export default function RegisterPage() {
           <div className="w-1/2 flex flex-col m-auto items-center justify-center">
             <section className="gap-4 flex items-center">
               <div
-                dangerouslySetInnerHTML={{ __html: svgCode }}
+                dangerouslySetInnerHTML={{
+                  __html: multiavatar(userDetails.avatar),
+                }}
                 className="w-[5vw] aspect-square border border-muted-foreground/50 rounded-full shadow-2xl"
               />
-              <Button size="sm" type="button" variant="secondary">
+              <Button
+                size="sm"
+                type="button"
+                variant="secondary"
+                onClick={generateAvatar}
+              >
                 <Dices /> Reroll
               </Button>
             </section>

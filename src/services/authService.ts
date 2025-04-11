@@ -6,15 +6,14 @@ import UserDetail from "../interfaces/UserDetail";
 export const authService = {
   async verifyDevice() {
     const fp = await FingerprintJS.load();
-    const result = await fp.get();
+    const { visitorId } = await fp.get();
     try {
       const { data } = await api.post("/auth/verify", {
-        visitorId: result.visitorId,
+        visitorId,
       });
       return data;
     } catch (error) {
-      console.error(error);
-      return null;
+      return { visitorId, error };
     }
   },
   async register(user: UserDetail) {
@@ -22,8 +21,7 @@ export const authService = {
       const { data } = await api.post("/auth/register", user);
       return data;
     } catch (error) {
-      console.error(error);
-      return null;
+      return error;
     }
   },
 };

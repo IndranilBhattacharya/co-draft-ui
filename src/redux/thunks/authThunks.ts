@@ -7,7 +7,7 @@ export const checkVerificationStatus = createAsyncThunk(
   "auth/checkVerificationStatus",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await authService.verifyDevice();
+      const data = await authService.verifyDevice();
       return data;
     } catch (error) {
       rejectWithValue(error);

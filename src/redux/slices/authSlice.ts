@@ -5,20 +5,27 @@ import { checkVerificationStatus } from "../thunks/authThunks";
 
 const initialState: AuthState = {
   isVerified: false,
-  userDetails: null,
+  userDetails: {
+    avatar: "",
+    userName: "",
+    visitorId: "",
+  },
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    verifySuccess: (state, action) => {
+    setAvatar: (state, action) => {
+      if (state.userDetails) state.userDetails.avatar = action.payload;
+    },
+    confirmVerification: (state, action) => {
       state.isVerified = true;
       state.userDetails = action.payload;
     },
     logout: (state) => {
       state.isVerified = false;
-      state.userDetails = null;
+      state.userDetails = initialState.userDetails;
     },
   },
   extraReducers: (builder) => {
@@ -28,10 +35,10 @@ const authSlice = createSlice({
     });
     builder.addCase(checkVerificationStatus.rejected, (state) => {
       state.isVerified = false;
-      state.userDetails = null;
+      state.userDetails = initialState.userDetails;
     });
   },
 });
 
-export const { verifySuccess, logout } = authSlice.actions;
+export const { setAvatar, confirmVerification, logout } = authSlice.actions;
 export default authSlice.reducer;
