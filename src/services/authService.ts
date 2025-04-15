@@ -18,7 +18,11 @@ export const authService = {
   },
   async register(user: UserDetail) {
     try {
-      const { data } = await api.post("/auth/register", user);
+      const payload = { ...user };
+      // removing optional loading state
+      delete payload.isRegistering;
+
+      const { data } = await api.post("/auth/register", payload);
       return data;
     } catch (error) {
       return error;

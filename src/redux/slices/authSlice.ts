@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import AuthState from "../../interfaces/AuthState";
-import { checkVerificationStatus } from "../thunks/authThunks";
+import { checkVerificationStatus, registerUser } from "../thunks/authThunks";
 
 const initialState: AuthState = {
   isVerified: false,
@@ -9,6 +9,7 @@ const initialState: AuthState = {
     avatar: "",
     userName: "",
     visitorId: "",
+    isRegistering: false,
   },
 };
 
@@ -36,6 +37,13 @@ const authSlice = createSlice({
     builder.addCase(checkVerificationStatus.rejected, (state) => {
       state.isVerified = false;
       state.userDetails = initialState.userDetails;
+    });
+    builder.addCase(registerUser.pending, (state) => {
+      state.userDetails.isRegistering = true;
+    });
+    builder.addCase(registerUser.fulfilled, (state) => {
+      state.isVerified = true;
+      state.userDetails = { ...initialState.userDetails, isRegistering: false };
     });
   },
 });

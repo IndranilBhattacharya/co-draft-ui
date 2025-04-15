@@ -19,7 +19,7 @@ export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (user: UserDetail, { rejectWithValue }) => {
     try {
-      const { data } = await authService.register(user);
+      const data = await authService.register(user);
       return data;
     } catch (error) {
       rejectWithValue(error);

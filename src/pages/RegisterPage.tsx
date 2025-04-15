@@ -10,6 +10,7 @@ import multiavatar from "@multiavatar/multiavatar/esm";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import UserDetail from "@/interfaces/UserDetail";
+import { registerUser } from "@/redux/thunks/authThunks";
 import LandingGreeting from "@/components/LandingGreeeting";
 import RegistrationHeader from "@/components/RegistrationHeader";
 import { BackgroundBeams } from "@/components/ui/BackgroundBeams";
@@ -45,7 +46,19 @@ export default function RegisterPage() {
     generateAvatar();
   }, [generateAvatar]);
 
-  const onSubmit = async (data: RegisterUserFormInputs) => {};
+  const onSubmit = async (data: RegisterUserFormInputs) => {
+    try {
+      if (!userDetails?.visitorId) return;
+      const payload = {
+        ...data,
+        visitorId: userDetails?.visitorId,
+      } as UserDetail;
+      // dispatch(registerUser(payload)); // Dispatch the thunk
+      alert("Registration successful!");
+    } catch (error) {
+      alert("Registration failed: " + error);
+    }
+  };
 
   return (
     <>
